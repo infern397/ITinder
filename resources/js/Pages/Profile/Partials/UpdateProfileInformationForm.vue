@@ -3,7 +3,9 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Link, useForm, usePage } from '@inertiajs/vue3';
+import {Link, useForm, usePage} from '@inertiajs/vue3';
+import { ArrowUpTrayIcon } from '@heroicons/vue/24/solid'
+import {ref} from "vue";
 
 defineProps<{
     mustVerifyEmail?: Boolean;
@@ -15,7 +17,21 @@ const user = usePage().props.auth.user;
 const form = useForm({
     name: user.name,
     email: user.email,
+    profile_picture: user.profile_picture,
 });
+
+const previewUrl = ref('');
+
+const uploadImage = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewUrl.value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+};
 </script>
 
 <template>
@@ -29,8 +45,25 @@ const form = useForm({
         </header>
 
         <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+            <div class="group w-fit">
+                <InputLabel for="profile_picture" value="Avatar"/>
+                <div class="relative h-40 w-40  flex justify-center items-center text-gray-300">
+                    <ArrowUpTrayIcon class="z-10 opacity-0 absolute group-hover:opacity-100 w-10 h-10"/>
+                    <input class="absolute z-10 inset-0 opacity-0 cursor-pointer" id="profile_picture"
+                           type="file" @input="uploadImage($event)"/>
+                    <img
+                        class="rounded w-full h-full object-cover group-hover:bg-gray-800"
+                        :src="previewUrl || form.profile_picture || '/images/default-avatar.jpg'"
+                        alt="">
+                    <div class="absolute inset-0 group-hover:bg-black/30 transition-all"></div>
+                </div>
+
+                <progress v-if="form.progress" :value="form.progress.percentage" max="100">
+                    {{ form.progress.percentage }}%
+                </progress>
+            </div>
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" value="Name"/>
 
                 <TextInput
                     id="name"
@@ -42,11 +75,11 @@ const form = useForm({
                     autocomplete="name"
                 />
 
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError class="mt-2" :message="form.errors.name"/>
             </div>
 
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Email"/>
 
                 <TextInput
                     id="email"
@@ -57,7 +90,7 @@ const form = useForm({
                     autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError class="mt-2" :message="form.errors.email"/>
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">

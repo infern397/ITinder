@@ -25,7 +25,6 @@ class User extends Authenticatable
         'location',
         'experience',
         'github_link',
-        'linkedin_link'
     ];
 
     /**

@@ -6,6 +6,7 @@ import TextInput from '@/Components/TextInput.vue';
 import {Link, useForm, usePage} from '@inertiajs/vue3';
 import { ArrowUpTrayIcon } from '@heroicons/vue/24/solid'
 import {ref} from "vue";
+import TextAreaInput from "@/Components/TextAreaInput.vue";
 
 defineProps<{
     mustVerifyEmail?: Boolean;
@@ -18,6 +19,7 @@ const form = useForm({
     name: user.name,
     email: user.email,
     profile_picture: user.profile_picture,
+    bio: user.bio,
 });
 
 const previewUrl = ref('');
@@ -57,10 +59,6 @@ const uploadImage = (event) => {
                         alt="">
                     <div class="absolute inset-0 group-hover:bg-black/30 transition-all"></div>
                 </div>
-
-                <progress v-if="form.progress" :value="form.progress.percentage" max="100">
-                    {{ form.progress.percentage }}%
-                </progress>
             </div>
             <div>
                 <InputLabel for="name" value="Name"/>
@@ -112,6 +110,12 @@ const uploadImage = (event) => {
                 >
                     A new verification link has been sent to your email address.
                 </div>
+            </div>
+
+            <div>
+                <InputLabel for="bio" value="About"/>
+                <TextAreaInput :model-value="form.bio"/>
+
             </div>
 
             <div class="flex items-center gap-4">

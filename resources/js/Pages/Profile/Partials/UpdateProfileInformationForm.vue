@@ -4,7 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import {Link, useForm, usePage} from '@inertiajs/vue3';
-import { ArrowUpTrayIcon } from '@heroicons/vue/24/solid'
+import {ArrowUpTrayIcon} from '@heroicons/vue/24/solid'
 import {ref} from "vue";
 import TextAreaInput from "@/Components/TextAreaInput.vue";
 
@@ -19,7 +19,10 @@ const form = useForm({
     name: user.name,
     email: user.email,
     profile_picture: user.profile_picture,
-    bio: user.bio,
+    bio: user.bio ?? '',
+    location: user.location ?? '',
+    experience: user.experience ?? '',
+    github_link: user.github_link ?? '',
 });
 
 const previewUrl = ref('');
@@ -34,6 +37,7 @@ const uploadImage = (event) => {
         reader.readAsDataURL(file);
     }
 };
+
 </script>
 
 <template>
@@ -114,8 +118,36 @@ const uploadImage = (event) => {
 
             <div>
                 <InputLabel for="bio" value="About"/>
-                <TextAreaInput :model-value="form.bio"/>
+                <TextAreaInput :model-value="form.bio" placeholder="Enter some information about yourself"/>
+            </div>
 
+            <div>
+                <InputLabel for="location" value="Location"/>
+                <TextInput
+                    id="location"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.location"
+                    required
+                    autocomplete="address-line1"
+                />
+            </div>
+
+            <div>
+                <InputLabel for="experience" value="Experience"/>
+                <TextAreaInput :model-value="form.experience" placeholder="Enter some information about your experience"/>
+            </div>
+
+            <div>
+                <InputLabel for="github_link" value="Github Link"/>
+                <TextInput
+                    id="github_link"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.github_link"
+                    required
+                    autocomplete="url"
+                />
             </div>
 
             <div class="flex items-center gap-4">

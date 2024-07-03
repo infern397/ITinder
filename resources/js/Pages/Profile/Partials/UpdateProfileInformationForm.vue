@@ -7,6 +7,7 @@ import {Link, useForm, usePage} from '@inertiajs/vue3';
 import {ArrowUpTrayIcon} from '@heroicons/vue/24/solid'
 import {ref} from "vue";
 import TextAreaInput from "@/Components/TextAreaInput.vue";
+import SkillManager from "@/Components/ITinder/Skills/SkillManager.vue";
 
 defineProps<{
     mustVerifyEmail?: Boolean;
@@ -23,6 +24,8 @@ const form = useForm({
     location: user.location ?? '',
     experience: user.experience ?? '',
     github_link: user.github_link ?? '',
+    skills: user.skills ?? [],
+    seeking_skills: user.skills ?? [],
 });
 
 const previewUrl = ref('');
@@ -148,6 +151,14 @@ const uploadImage = (event) => {
                     required
                     autocomplete="url"
                 />
+            </div>
+
+            <div>
+                <SkillManager v-model="form.skills" label="Your Skills"/>
+            </div>
+
+            <div>
+                <SkillManager v-model="form.seeking_skills" label="Seeking Skills"/>
             </div>
 
             <div class="flex items-center gap-4">

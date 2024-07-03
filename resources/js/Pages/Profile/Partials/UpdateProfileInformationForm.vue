@@ -27,7 +27,7 @@ const form = useForm({
     experience: user.experience ?? '',
     github_link: user.github_link ?? '',
     skills: user.skills ?? [],
-    seeking_skills: user.skills ?? [],
+    seeking_skills: user.seekingSkills ?? [],
 });
 
 const previewUrl = ref('');
@@ -56,6 +56,7 @@ const uploadImage = (event) => {
         </header>
 
         <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+            {{ user }}
             <div class="group w-fit">
                 <InputLabel for="profile_picture" value="Avatar"/>
                 <div class="relative h-40 w-40  flex justify-center items-center text-gray-300">
@@ -123,7 +124,8 @@ const uploadImage = (event) => {
 
             <div>
                 <InputLabel for="bio" value="About"/>
-                <TextAreaInput :model-value="form.bio" placeholder="Enter some information about yourself"/>
+                <TextAreaInput v-model="form.bio" placeholder="Enter some information about yourself"/>
+                <InputError class="mt-2" :message="form.errors.bio"/>
             </div>
 
             <div>
@@ -133,15 +135,16 @@ const uploadImage = (event) => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.location"
-                    required
                     autocomplete="address-line1"
                 />
+                <InputError class="mt-2" :message="form.errors.location"/>
             </div>
 
             <div>
                 <InputLabel for="experience" value="Experience"/>
-                <TextAreaInput :model-value="form.experience"
+                <TextAreaInput v-model="form.experience"
                                placeholder="Enter some information about your experience"/>
+                <InputError class="mt-2" :message="form.errors.experience"/>
             </div>
 
             <div>
@@ -151,16 +154,18 @@ const uploadImage = (event) => {
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.github_link"
-                    required
                     autocomplete="url"
                 />
+                <InputError class="mt-2" :message="form.errors.github_link"/>
             </div>
             <div>
                 <SkillManager v-model="form.skills" :available-skills="availableUserSkills" label="Your Skills"/>
+                <InputError class="mt-2" :message="form.errors.skills"/>
             </div>
 
             <div>
                 <SkillManager v-model="form.seeking_skills" :available-skills="availableSeekingSkills" label="Seeking Skills"/>
+                <InputError class="mt-2" :message="form.errors.seeking_skills"/>
             </div>
 
             <div class="flex items-center gap-4">

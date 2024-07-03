@@ -16,7 +16,6 @@ const emit = defineEmits<{
 }>();
 
 const removeSkill = (skill: Skill) => {
-    console.log('removeSkill', skill)
     emit('skill-removed', skill);
 };
 
@@ -31,7 +30,7 @@ const removeSkill = (skill: Skill) => {
                 <div class="py-1 px-3 ">
                     {{ skill.name }}
                 </div>
-                <div @click="removeSkill(skill); console.log('click')"
+                <div @click="removeSkill(skill)"
                      class="flex rounded items-center justify-center h-full py-1 px-2 hover:bg-gray-500
                      hover:text-gray-100">
                     <TrashIcon class="w-4 h-4 block"/>

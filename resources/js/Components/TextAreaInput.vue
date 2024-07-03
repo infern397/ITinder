@@ -35,6 +35,7 @@ defineExpose({focus: () => input.value?.focus()});
         rows="3"
         :placeholder="props.placeholder || 'Enter some text...'"
         ref="input"
+        v-model="model"
         @input="autoExpand"
     ></textarea>
 </template>

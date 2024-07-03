@@ -12,6 +12,8 @@ import SkillManager from "@/Components/ITinder/Skills/SkillManager.vue";
 defineProps<{
     mustVerifyEmail?: Boolean;
     status?: String;
+    availableUserSkills: Array<{ id: number, name: string }>;
+    availableSeekingSkills: Array<{ id: number, name: string }>;
 }>();
 
 const user = usePage().props.auth.user;
@@ -138,7 +140,8 @@ const uploadImage = (event) => {
 
             <div>
                 <InputLabel for="experience" value="Experience"/>
-                <TextAreaInput :model-value="form.experience" placeholder="Enter some information about your experience"/>
+                <TextAreaInput :model-value="form.experience"
+                               placeholder="Enter some information about your experience"/>
             </div>
 
             <div>
@@ -152,13 +155,12 @@ const uploadImage = (event) => {
                     autocomplete="url"
                 />
             </div>
-
             <div>
-                <SkillManager v-model="form.skills" label="Your Skills"/>
+                <SkillManager v-model="form.skills" :available-skills="availableUserSkills" label="Your Skills"/>
             </div>
 
             <div>
-                <SkillManager v-model="form.seeking_skills" label="Seeking Skills"/>
+                <SkillManager v-model="form.seeking_skills" :available-skills="availableSeekingSkills" label="Seeking Skills"/>
             </div>
 
             <div class="flex items-center gap-4">

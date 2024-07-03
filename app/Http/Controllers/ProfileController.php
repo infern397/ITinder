@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Resources\SkillResource;
+use App\Models\Skill;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,9 +20,24 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
+        $user = $request->user();
+
+        $userSkillsIds = $user->skills ? $user->skills->pluck('id')->toArray() : [];
+        $userSeekingSkillsIds = $user->seeking_skills ? $user->seeking_skills->pluck('id')->toArray() : [];
+
+        $availableUserSkills = SkillResource::collection(
+            Skill::query()->whereNotIn('id', $userSkillsIds)->get()
+        )->resolve();
+
+        $availableSeekingSkills = SkillResource::collection(
+            Skill::query()->whereNotIn('id', $userSeekingSkillsIds)->get()
+        )->resolve();
+
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
+            'availableUserSkills' => $availableUserSkills,
+            'availableSeekingSkills' => $availableSeekingSkills
         ]);
     }
 

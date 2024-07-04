@@ -22,7 +22,7 @@ const emit = defineEmits<{
     (e: 'update:modelValue', skills: Skill[]): void;
 }>();
 
-const selectedSkills = ref<Skill[]>([]);
+const selectedSkills = ref<Skill[]>(props.modelValue);
 
 const addSkill = (skill: Skill) => {
     if (!selectedSkills.value.some(s => s.id === skill.id)) {

@@ -18,6 +18,12 @@ defineProps<{
 
 const user = usePage().props.auth.user;
 
+const originalProfilePicture = ref(user.profile_picture);
+
+const previewUrl = ref('');
+const userSkills = ref(user.skills ?? []);
+const seekingSkills = ref(user.seeking_skills ?? []);
+
 const form = useForm({
     name: user.name,
     email: user.email,
@@ -26,11 +32,11 @@ const form = useForm({
     location: user.location ?? '',
     experience: user.experience ?? '',
     github_link: user.github_link ?? '',
-    skills: user.skills ?? [],
-    seeking_skills: user.seekingSkills ?? [],
+    skills: userSkills.value.map(skill => skill.id),
+    seeking_skills: seekingSkills.value.map(skill => skill.id),
 });
 
-const previewUrl = ref('');
+
 
 const uploadImage = (event) => {
     const file = event.target.files[0];
@@ -44,6 +50,22 @@ const uploadImage = (event) => {
     }
 };
 
+const submitForm = () => {
+    if (originalProfilePicture.value === form.profile_picture) {
+        delete form.profile_picture;
+    }
+    form.skills = userSkills.value.map(skill => skill.id);
+    form.seeking_skills = seekingSkills.value.map(skill => skill.id);
+    form.post(route('profile.update'), {
+        errorBag: 'updateProfileInformation',
+        preserveScroll: true,
+        onSuccess: () => {
+            originalProfilePicture.value = form.profile_picture;
+            previewUrl.value = '';
+        },
+    });
+};
+
 </script>
 
 <template>
@@ -55,17 +77,17 @@ const uploadImage = (event) => {
                 Update your account's profile information and email address.
             </p>
         </header>
-
-        <form @submit.prevent="form.post(route('profile.update'))" class="mt-6 space-y-6">
+        <form @submit.prevent="submitForm" class="mt-6 space-y-6">
             <div class="group w-fit">
                 <InputLabel for="profile_picture" value="Avatar"/>
+                    {{ originalProfilePicture }}
                 <div class="relative h-40 w-40  flex justify-center items-center text-gray-300">
                     <ArrowUpTrayIcon class="z-10 opacity-0 absolute group-hover:opacity-100 w-10 h-10"/>
                     <input class="absolute z-10 inset-0 opacity-0 cursor-pointer" id="profile_picture"
                            type="file" @input="uploadImage($event)"/>
                     <img
                         class="rounded w-full h-full object-cover group-hover:bg-gray-800"
-                        :src="previewUrl || form.profile_picture || '/images/default-avatar.jpg'"
+                        :src="previewUrl || originalProfilePicture || '/images/default-avatar.jpg'"
                         alt="">
                     <div class="absolute inset-0 group-hover:bg-black/30 transition-all"></div>
                 </div>
@@ -158,13 +180,13 @@ const uploadImage = (event) => {
                 />
                 <InputError class="mt-2" :message="form.errors.github_link"/>
             </div>
-            <div>
-                <SkillManager v-model="form.skills" :available-skills="availableUserSkills" label="Your Skills"/>
+            <div class="text-white">
+                <SkillManager v-model="userSkills" :available-skills="availableUserSkills" label="Your Skills"/>
                 <InputError class="mt-2" :message="form.errors.skills"/>
             </div>
 
             <div>
-                <SkillManager v-model="form.seeking_skills" :available-skills="availableSeekingSkills"
+                <SkillManager v-model="seekingSkills" :available-skills="availableSeekingSkills"
                               label="Seeking Skills"/>
                 <InputError class="mt-2" :message="form.errors.seeking_skills"/>
             </div>

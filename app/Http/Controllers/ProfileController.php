@@ -64,6 +64,13 @@ class ProfileController extends Controller
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
+        if ($request->has('skills')) {
+            $user->skills()->sync($request->input('skills'));
+        }
+
+        if ($request->has('seeking_skills')) {
+            $user->seekingSkills()->sync($request->input('seeking_skills'));
+        }
 
         $user->save();
 

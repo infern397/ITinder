@@ -80,7 +80,6 @@ const submitForm = () => {
         <form @submit.prevent="submitForm" class="mt-6 space-y-6">
             <div class="group w-fit">
                 <InputLabel for="profile_picture" value="Avatar"/>
-                    {{ originalProfilePicture }}
                 <div class="relative h-40 w-40  flex justify-center items-center text-gray-300">
                     <ArrowUpTrayIcon class="z-10 opacity-0 absolute group-hover:opacity-100 w-10 h-10"/>
                     <input class="absolute z-10 inset-0 opacity-0 cursor-pointer" id="profile_picture"

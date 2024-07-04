@@ -40,6 +40,7 @@ const uploadImage = (event) => {
             previewUrl.value = e.target.result;
         };
         reader.readAsDataURL(file);
+        form.profile_picture = file;
     }
 };
 
@@ -55,8 +56,7 @@ const uploadImage = (event) => {
             </p>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
-            {{ user }}
+        <form @submit.prevent="form.post(route('profile.update'))" class="mt-6 space-y-6">
             <div class="group w-fit">
                 <InputLabel for="profile_picture" value="Avatar"/>
                 <div class="relative h-40 w-40  flex justify-center items-center text-gray-300">
@@ -164,7 +164,8 @@ const uploadImage = (event) => {
             </div>
 
             <div>
-                <SkillManager v-model="form.seeking_skills" :available-skills="availableSeekingSkills" label="Seeking Skills"/>
+                <SkillManager v-model="form.seeking_skills" :available-skills="availableSeekingSkills"
+                              label="Seeking Skills"/>
                 <InputError class="mt-2" :message="form.errors.seeking_skills"/>
             </div>
 

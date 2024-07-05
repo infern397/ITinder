@@ -23,6 +23,9 @@
     "dependencies": {
         "@headlessui/vue": "^1.7.22",
         "@heroicons/vue": "^2.1.4",
-        "@inertiajs/vue3": "^1.2.0"
+        "@inertiajs/vue3": "^1.2.0",
+        "@vueuse/core": "^10.11.0",
+        "@vueuse/motion": "^2.2.3",
+        "interactjs": "^1.10.27"
     }
 }

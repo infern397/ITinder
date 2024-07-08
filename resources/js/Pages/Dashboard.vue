@@ -24,13 +24,8 @@ const computedHeight = computed(() => windowHeight.value - 65);
     <Head title="Dashboard"/>
 
     <AuthenticatedLayout>
-        <div class="flex justify-center items-center relative overflow-hidden" :style="`height: ${computedHeight}px`">
+        <div class="flex justify-center items-center relative overflow-hidden py-10 md:py-20" :style="`height: ${computedHeight}px`">
             <Deck :users="props.users"/>
-
-            <div
-                id="center"
-                class="top-1/2 left-1/2 absolute w-[305px] h-[405px] pointer-events-none -translate-x-1/2 -translate-y-1/2"
-            ></div>
         </div>
     </AuthenticatedLayout>
 </template>

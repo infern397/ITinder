@@ -21,7 +21,7 @@ const removeCard = (index: number) => {
 </script>
 
 <template>
-    <div class="deck relative w-[401px] h-[501px]">
+    <div class="deck relative aspect-[4/3] max-w-[80%] h-full">
         <Card
             v-for="(card, index) in cards.slice(0, 2)"
             :key="card.id"

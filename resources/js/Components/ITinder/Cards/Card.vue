@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, PropType } from "vue";
+import {onMounted, ref, PropType, computed} from "vue";
 import interact from 'interactjs';
 import { CardInterface } from "@/types/CardInterface";
 import { UserInterface } from "@/types/UserInterface";
@@ -16,6 +16,10 @@ const emit = defineEmits(['remove']);
 
 const isCardMoved = ref(false);
 const expandedBlock = ref<string | null>(null);
+
+const color = computed(() => {
+    return Math.abs(props.card.x) > 100 ? (props.card.swipeDirection === 'right' ? 'green-glow' : 'red-glow') : '';
+});
 
 const toggleExpandBlock = (block: string) => {
     if (isCardMoved.value) return;
@@ -66,10 +70,11 @@ onMounted(() => {
 
 <template>
     <div
-        :class="`absolute transition-shadow select-none touch-none rounded-lg shadow-lg bg-white w-[400px] h-[500px] card-${card.id} ${Math.abs(card.x) > 100 ? (card.swipeDirection === 'right' ? 'green-glow' : 'red-glow') : ''}`"
+        :class="`absolute transition-shadow select-none touch-none rounded-lg
+        shadow-lg bg-white w-full h-full card-${card.id} ${color}`"
         :style="{ zIndex: cards.length - index }"
     >
-        <div class="card-content p-4 flex flex-col gap-2 h-full">
+        <div class="card-content p-1.5 sm:p-4 flex flex-col gap-2 h-full">
             <UserProfile :user="card.user" />
             <CardDetails
                 :user="card.user"
@@ -81,10 +86,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.card-content {
-    padding: 20px;
-}
-
 .transition {
     transition: all 0.2s ease-out;
 }

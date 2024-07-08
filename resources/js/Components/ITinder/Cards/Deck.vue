@@ -2,12 +2,18 @@
 import { reactive } from "vue";
 import Card from "@/Components/ITinder/Cards/Card.vue";
 import {CardInterface} from "@/types/CardInterface";
+import { UserInterface } from "@/types/UserInterface"; // добавляем интерфейс пользователя
 
-const cards: CardInterface[] = reactive([
-    { id: 1, x: 0, y: 0 },
-    { id: 2, x: 0, y: 0 },
-    { id: 3, x: 0, y: 0 },
-]);
+const props = defineProps({
+    users: Array as PropType<UserInterface[]>, // ожидаем список пользователей в пропсах
+});
+
+const cards: CardInterface[] = reactive(props.users.map((user, index) => ({
+    id: user.id,
+    user: user,
+    x: 0,
+    y: 0,
+})));
 
 const removeCard = (index: number) => {
     cards.splice(index, 1);
@@ -15,7 +21,7 @@ const removeCard = (index: number) => {
 </script>
 
 <template>
-    <div class="deck relative w-[301px] h-[401px]">
+    <div class="deck relative w-[401px] h-[501px]">
         <Card
             v-for="(card, index) in cards"
             :key="card.id"

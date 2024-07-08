@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
-import { computed, onMounted, ref, reactive, nextTick } from "vue";
+import {Head} from '@inertiajs/vue3';
+import {computed, onMounted, ref, reactive, PropType} from "vue";
 import Deck from "@/Components/ITinder/Cards/Deck.vue";
+import { UserInterface } from "@/types/UserInterface";
+
+const props = defineProps({
+    users: Array as PropType<UserInterface[]>,
+});
 
 const windowHeight = ref(window.innerHeight);
-const cards = reactive([
-    { id: 1, x: 0, y: 0 },
-    { id: 2, x: 0, y: 0 },
-    { id: 3, x: 0, y: 0 },
-]);
 
 onMounted(() => {
     window.addEventListener('resize', () => {
@@ -18,16 +18,14 @@ onMounted(() => {
 });
 
 const computedHeight = computed(() => windowHeight.value - 65);
-
-
 </script>
 
 <template class="overflow-hidden">
-    <Head title="Dashboard" />
+    <Head title="Dashboard"/>
 
     <AuthenticatedLayout>
         <div class="flex justify-center items-center relative overflow-hidden" :style="`height: ${computedHeight}px`">
-            <Deck />
+            <Deck :users="props.users"/>
 
             <div
                 id="center"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import {PropType, reactive} from "vue";
 import Card from "@/Components/ITinder/Cards/Card.vue";
 import {CardInterface} from "@/types/CardInterface";
 import { UserInterface } from "@/types/UserInterface"; // добавляем интерфейс пользователя
@@ -23,7 +23,7 @@ const removeCard = (index: number) => {
 <template>
     <div class="deck relative w-[401px] h-[501px]">
         <Card
-            v-for="(card, index) in cards"
+            v-for="(card, index) in cards.slice(0, 2)"
             :key="card.id"
             :card="card"
             :index="index"

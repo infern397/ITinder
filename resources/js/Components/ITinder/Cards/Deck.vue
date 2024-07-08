@@ -2,10 +2,11 @@
 import {PropType, reactive} from "vue";
 import Card from "@/Components/ITinder/Cards/Card.vue";
 import {CardInterface} from "@/types/CardInterface";
-import { UserInterface } from "@/types/UserInterface"; // добавляем интерфейс пользователя
+import { UserInterface } from "@/types/UserInterface";
+import {useForm} from "@inertiajs/vue3";
 
 const props = defineProps({
-    users: Array as PropType<UserInterface[]>, // ожидаем список пользователей в пропсах
+    users: Array as PropType<UserInterface[]>,
 });
 
 const cards: CardInterface[] = reactive(props.users.map((user, index) => ({
@@ -15,8 +16,21 @@ const cards: CardInterface[] = reactive(props.users.map((user, index) => ({
     y: 0,
 })));
 
-const removeCard = (index: number) => {
+const removeCard = async (index: number) => {
+    console.log(index)
+    const card = cards[index];
+    if (card.swipeDirection === 'right') {
+        await saveMatch(card.user.id);
+    }
     cards.splice(index, 1);
+};
+
+const saveMatch = async (matchedUserId: number) => {
+    try {
+        useForm({ matched_user_id: matchedUserId }).post(route('matches.store'));
+    } catch (error) {
+        console.error("Error saving match", error);
+    }
 };
 </script>
 

@@ -17,11 +17,11 @@ const toggleBlock = () => {
 
 <template>
     <div
-        class="text-sm text-gray-600 border border-gray-300 rounded p-2 bg-inherit cursor-pointer"
+        class="text-sm text-gray-600 border border-gray-300 rounded sm:p-1.5 p-1 bg-inherit cursor-pointer"
         @click="toggleBlock"
         :class="{ 'expanded': expandedBlock === block, 'hidden': expandedBlock && expandedBlock !== block }"
     >
-        <p class="text-gray-600 text-sm font-medium">{{ title }}:</p>
+        <p class="text-gray-600 font-medium">{{ title }}:</p>
         <p v-text="expandedBlock === block ? content : content.substring(0, 100) + (content.length > 100 ? '...' : '')"></p>
     </div>
 </template>

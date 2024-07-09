@@ -35,10 +35,19 @@ class MatchController extends Controller
         return Redirect::back()->with('message', 'Match successfully created');
     }
 
-    public function showMatchesPage(Request $request)
+    public function showMatchesPage(Request $request, $matchId = null)
     {
-        // Получаем тех пользователей, которые выбрали текущего пользователя
-        $matches = UserMatch::where('matched_user_id', $request->user()->id)->with('user')->get();
-        return Inertia::render('Matches', ['users' => UserResource::collection($matches->pluck('user'))]);
+        $user = $request->user();
+        $matches = UserMatch::where('matched_user_id', $user->id)->with('user')->get();
+        $selectedMatch = $matches->first();
+
+        if ($matchId) {
+            $selectedMatch = $matches->where('id', $matchId)->first();
+        }
+
+        return Inertia::render('Matches', [
+            'matches' => $matches,
+            'selectedMatch' => $selectedMatch,
+        ]);
     }
 }

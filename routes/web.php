@@ -24,7 +24,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [MatchController::class, 'index'])->name('dashboard');
     Route::post('/matches', [MatchController::class, 'store'])->name('matches.store');
     Route::get('/matches', [MatchController::class, 'matches'])->name('matches.index');
+
     Route::get('/my-matches', [MatchController::class, 'showMatchesPage'])->name('matches.page');
+    Route::get('/my-matches/{match}', [MatchController::class, 'showMatchesPage'])->name('matches.show');
 });
 
 require __DIR__.'/auth.php';

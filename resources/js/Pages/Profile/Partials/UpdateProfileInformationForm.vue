@@ -76,7 +76,6 @@ const submitForm = () => {
             </p>
         </header>
         <form @submit.prevent="submitForm" class="mt-6 space-y-6">
-            {{ user }}
             <div class="group w-fit">
                 <InputLabel for="profile_picture" value="Avatar"/>
                 <div class="relative h-40 w-40  flex justify-center items-center text-gray-300">

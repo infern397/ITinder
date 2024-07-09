@@ -12,6 +12,8 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected $with = ['skills', 'seekingSkills'];
+
     /**
      * The attributes that are mass assignable.
      *

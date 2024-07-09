@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import {onMounted, PropType} from 'vue';
-import {UserInterface} from '@/types/UserInterface';
+
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import {usePage} from "@inertiajs/vue3";
+import {onMounted, ref, watch} from "vue";
 import Sidebar from "@/Components/ITinder/Matches/Sidebar.vue";
+import Match from "@/Components/ITinder/Matches/Match.vue";
 
-const props = defineProps({
-    users: Array as PropType<UserInterface[]>,
-});
-
-onMounted(
-    () => {
-        console.log(props.users);
-    }
-)
+const { props } = usePage();
+const matches = ref(props.matches);
+const selectedMatch = ref(props.selectedMatch);
 
 </script>
 
@@ -39,9 +35,12 @@ onMounted(
                 <div class="sm:grid grid-cols-12 gap-3">
                     <div class="bg-white col-span-4 lg:col-span-3
                      dark:bg-gray-800 shadow sm:rounded-lg">
-                        <Sidebar class="transition-transform -translate-x-full sm:translate-x-0"/>
+                        <Sidebar class="transition-transform -translate-x-full sm:translate-x-0"
+                        :matches = "matches"
+                        />
                     </div>
                     <div class="bg-white col-span-8 lg:col-span-9 dark:bg-gray-800 shadow rounded-lg">
+                        <Match :match="selectedMatch" />
                     </div>
                 </div>
             </div>

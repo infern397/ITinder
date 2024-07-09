@@ -36,8 +36,6 @@ const form = useForm({
     seeking_skills: seekingSkills.value.map(skill => skill.id),
 });
 
-
-
 const uploadImage = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -60,7 +58,7 @@ const submitForm = () => {
         errorBag: 'updateProfileInformation',
         preserveScroll: true,
         onSuccess: () => {
-            originalProfilePicture.value = form.profile_picture;
+            originalProfilePicture.value = user.profile_picture;
             previewUrl.value = '';
         },
     });
@@ -78,6 +76,7 @@ const submitForm = () => {
             </p>
         </header>
         <form @submit.prevent="submitForm" class="mt-6 space-y-6">
+            {{ user }}
             <div class="group w-fit">
                 <InputLabel for="profile_picture" value="Avatar"/>
                 <div class="relative h-40 w-40  flex justify-center items-center text-gray-300">

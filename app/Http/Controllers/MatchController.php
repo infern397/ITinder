@@ -27,11 +27,18 @@ class MatchController extends Controller
 
     public function store(Request $request)
     {
-        $match = UserMatch::create([
+        UserMatch::create([
             'user_id' => $request->user()->id,
             'matched_user_id' => $request->matched_user_id,
         ]);
 
         return Redirect::back()->with('message', 'Match successfully created');
+    }
+
+    public function showMatchesPage(Request $request)
+    {
+        // Получаем тех пользователей, которые выбрали текущего пользователя
+        $matches = UserMatch::where('matched_user_id', $request->user()->id)->with('user')->get();
+        return Inertia::render('Matches', ['users' => UserResource::collection($matches->pluck('user'))]);
     }
 }

@@ -16,3 +16,13 @@ export interface UserInterface {
     skills: SkillInterface[];
     seekingSkills: SkillInterface[];
 }
+
+export interface MatchInterface {
+    id: number;
+    user_id: number;
+    matched_user_id: number;
+    status: string;
+    created_at: string | null;
+    updated_at: string | null;
+    user: UserInterface;
+}

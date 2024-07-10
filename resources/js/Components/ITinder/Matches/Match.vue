@@ -1,9 +1,37 @@
 <script setup lang="ts">
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import {router} from '@inertiajs/vue3';
+import {MatchInterface} from "@/types/UserInterface";
+import {PropType} from "vue";
 
 const props = defineProps({
-    match: Object,
+    match: Object as PropType<MatchInterface>,
 });
+
+const acceptMatch = function () {
+    router.post(route('my-matches.accept', {match: props.match.id}), {}, {
+        onSuccess: () => {
+            router.get(route('my-matches.index', {status: 'accepted', match: props.match.id}));
+        },
+
+    });
+};
+
+const rejectMatch = function () {
+    router.post(route('my-matches.reject', {match: props.match.id}), {}, {
+        onSuccess: () => {
+            router.get(route('my-matches.index', {status: 'rejected', match: props.match.id}));
+        },
+    });
+};
+
+const cancelMatch = function () {
+    router.post(route('my-matches.cancel', {match: props.match.id}), {}, {
+        onSuccess: () => {
+            router.get(route('my-matches.index', {status: 'pending', match: props.match.id}));
+        },
+    });
+}
 </script>
 
 <template>
@@ -22,35 +50,31 @@ const props = defineProps({
         </div>
         <div>
             <h3 class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1">Experience</h3>
-            <p class="p-3 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300  rounded-md shadow-sm">
+            <p class="p-3 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm">
                 {{ match.user.experience }}</p>
         </div>
         <div>
             <h3 class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1">Skills</h3>
-            <ul class="flex flex-wrap gap-2 p-2 border-gray-300
-            dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm rounded-md shadow-sm">
-                <li class="p-2 text-sm rounded border border-gray-300" v-for="skill in match.user.skills"
+            <ul class="flex flex-wrap gap-2 p-2 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm">
+                <li class="px-2 py-1 text-sm rounded border border-gray-300" v-for="skill in match.user.skills"
                     :key="skill.id">{{ skill.name }}
                 </li>
             </ul>
         </div>
         <div>
             <h3 class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1">Seeking Skills</h3>
-            <ul class="flex flex-wrap gap-2 p-2 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300
-                rounded-md shadow-sm rounded-md shadow-sm">
-                <li class="p-2 text-sm rounded border border-gray-300"
-                    v-for="skill in match.user.seeking_skills" :key="skill.id">{{ skill.name }}
+            <ul class="flex flex-wrap gap-2 p-2 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm">
+                <li class="px-2 py-1 text-sm rounded border border-gray-300" v-for="skill in match.user.seeking_skills"
+                    :key="skill.id">{{ skill.name }}
                 </li>
             </ul>
         </div>
         <div class="flex gap-2">
-            <PrimaryButton>Accept</PrimaryButton>
-            <PrimaryButton>Reject</PrimaryButton>
-
+            <PrimaryButton v-if="match.status !== 'pending'" @click="cancelMatch">Cancel</PrimaryButton>
+            <PrimaryButton v-if="match.status !== 'accepted'" @click="acceptMatch">Accept</PrimaryButton>
+            <PrimaryButton v-if="match.status !== 'rejected'" @click="rejectMatch">Reject</PrimaryButton>
         </div>
     </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

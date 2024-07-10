@@ -15,33 +15,13 @@ class MatchController extends Controller
 {
     public function index()
     {
-        $matchedUserIds = UserMatch::query()->where('user_id', Auth::user()->id)->pluck('matched_user_id');
-
-        $users = UserResource::collection(
-            User::query()
-                ->whereNotIn('id', $matchedUserIds)
-                ->where('id', '!=', Auth::user()->id) // Исключаем текущего пользователя
-                ->inRandomOrder()
-                ->limit(5)
-                ->get()
-        )->resolve();
-
+        $users = $this->getUsers();
         return Inertia::render('Dashboard', ['users' => $users]);
     }
 
     public function getMoreUsers()
     {
-        $matchedUserIds = UserMatch::query()->where('user_id', Auth::user()->id)->pluck('matched_user_id');
-
-        $users = UserResource::collection(
-            User::query()
-                ->whereNotIn('id', $matchedUserIds)
-                ->where('id', '!=', Auth::user()->id) // Исключаем текущего пользователя
-                ->inRandomOrder()
-                ->limit(5)
-                ->get()
-        )->resolve();
-
+        $users = $this->getUsers();
         return Redirect::back()->with('newUsers', $users);
     }
 
@@ -53,5 +33,19 @@ class MatchController extends Controller
         ]);
 
         return Redirect::back()->with('message', 'Match successfully created');
+    }
+
+    private function getUsers()
+    {
+        $matchedUserIds = UserMatch::query()->where('user_id', Auth::user()->id)->pluck('matched_user_id');
+
+        return UserResource::collection(
+            User::query()
+                ->whereNotIn('id', $matchedUserIds)
+                ->where('id', '!=', Auth::user()->id) // Исключаем текущего пользователя
+                ->inRandomOrder()
+                ->limit(5)
+                ->get()
+        )->resolve();
     }
 }

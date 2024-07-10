@@ -89,4 +89,14 @@ class User extends Authenticatable
             ->withPivot('status')
             ->withTimestamps();
     }
+
+    public function getSkillsIdsAttribute()
+    {
+        return $this->skills ? $this->skills->pluck('id')->toArray() : [];
+    }
+
+    public function getSeekingSkillsIdsAttribute()
+    {
+        return $this->seeking_skills ? $this->seeking_skills->pluck('id')->toArray() : [];
+    }
 }

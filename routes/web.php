@@ -35,8 +35,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/more-users', [MatchController::class, 'getMoreUsers'])->name('matches.more');
     Route::post('/', [MatchController::class, 'store'])->name('matches.store');
 
-    Route::get('/my-matches/{match?}', [MyMatchesController::class, 'index'])->name('my-matches.index');
-
+    Route::get('/my-matches/{status}/{match?}', [MyMatchesController::class, 'index'])->name('my-matches.index');
+    Route::post('/my-matches/{match}/accept', [MyMatchesController::class, 'acceptMatch'])->name('my-matches.accept');
+    Route::post('/my-matches/{match}/reject', [MyMatchesController::class, 'rejectMatch'])->name('my-matches.reject');
+    Route::post('/my-matches/{match}/cancel', [MyMatchesController::class, 'undoStatus'])->name('my-matches.cancel');
 });
 
 require __DIR__.'/auth.php';

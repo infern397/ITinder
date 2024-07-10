@@ -72,8 +72,8 @@ onMounted(() => {
                     <div
                         class="flex items-center py-3 px-5 justify-between rounded-t top-0 left-0 right-0 dark:bg-gray-800 dark:text-gray-300 border-b-2 border-b-gray-600">
                         <Link class="pl-3" :href="route('chat.index')">Back</Link>
-                        <div class="font-bold">{{ user.name }}</div>
-                        <img :src="user.profile_picture" alt="Profile Picture" class="w-14 h-14 rounded object-cover">
+                        <div class="font-bold">{{ receiver.name }}</div>
+                        <img :src="receiver.profile_picture" alt="Profile Picture" class="w-14 h-14 rounded object-cover">
                     </div>
 
                     <div class="px-5 pt-5 h-full overflow-y-auto" ref="messageContainer">

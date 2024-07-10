@@ -1,28 +1,69 @@
 <script setup lang="ts">
-import {PropType, reactive} from "vue";
+import { onMounted, PropType, reactive, watch } from "vue";
 import Card from "@/Components/ITinder/Cards/Card.vue";
-import {CardInterface} from "@/types/CardInterface";
+import { CardInterface } from "@/types/CardInterface";
 import { UserInterface } from "@/types/UserInterface";
-import {useForm} from "@inertiajs/vue3";
+import { router, useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
-    users: Array as PropType<UserInterface[]>,
+    users: {
+        type: Array as PropType<UserInterface[]>,
+        required: true
+    },
+    newUsers: {
+        type: Array as PropType<UserInterface[]>,
+        required: false,
+        default: () => []
+    }
 });
 
-const cards: CardInterface[] = reactive(props.users.map((user, index) => ({
+const cards = reactive<CardInterface[]>(props.users.map((user) => ({
     id: user.id,
     user: user,
     x: 0,
-    y: 0,
+    y: 0
 })));
 
+const addNewUsersToDeck = (newUsers: UserInterface[]) => {
+    if (Array.isArray(newUsers)) {
+        newUsers.forEach(user => {
+            cards.push({
+                id: user.id,
+                user: user,
+                x: 0,
+                y: 0
+            });
+        });
+    }
+};
+
+watch(() => props.users, (newUsers) => {
+    console.log(newUsers)
+    addNewUsersToDeck(newUsers);
+});
+
+const fetchMoreUsers = async () => {
+    try {
+        await router.get(route('matches.more'), {}, {
+            preserveState: true,
+            onSuccess: (page) => {
+                addNewUsersToDeck(page.props.newUsers);
+            }
+        });
+    } catch (error) {
+        console.error("Error fetching more users", error);
+    }
+};
+
 const removeCard = async (index: number) => {
-    console.log(index)
     const card = cards[index];
     if (card.swipeDirection === 'right') {
         await saveMatch(card.user.id);
     }
     cards.splice(index, 1);
+    if (cards.length === 1) {
+        await fetchMoreUsers();
+    }
 };
 
 const saveMatch = async (matchedUserId: number) => {
@@ -32,6 +73,10 @@ const saveMatch = async (matchedUserId: number) => {
         console.error("Error saving match", error);
     }
 };
+
+onMounted(() => {
+    console.log(props.users);
+});
 </script>
 
 <template>

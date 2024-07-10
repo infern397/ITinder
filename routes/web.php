@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\MatchController;
+use App\Http\Controllers\Match\MatchController;
+use App\Http\Controllers\Match\MyMatchesController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -21,12 +22,21 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/dashboard', [MatchController::class, 'index'])->name('dashboard');
-    Route::post('/matches', [MatchController::class, 'store'])->name('matches.store');
-    Route::get('/matches', [MatchController::class, 'matches'])->name('matches.index');
+//    Route::get('/dashboard', [MatchController::class, 'index'])->name('dashboard');
+//    Route::post('/matches', [MatchController::class, 'store'])->name('matches.store');
+//    Route::get('/matches', [MatchController::class, 'matches'])->name('matches.index');
+//
+//    Route::get('/my-matches', [MatchController::class, 'showMatchesPage'])->name('matches.page');
+//    Route::get('/my-matches/{match}', [MatchController::class, 'showMatchesPage'])->name('matches.show');
+});
 
-    Route::get('/my-matches', [MatchController::class, 'showMatchesPage'])->name('matches.page');
-    Route::get('/my-matches/{match}', [MatchController::class, 'showMatchesPage'])->name('matches.show');
+Route::middleware('auth')->group(function () {
+    Route::get('/', [MatchController::class, 'index'])->name('matches.index');
+    Route::get('/more-users', [MatchController::class, 'getMoreUsers'])->name('matches.more');
+    Route::post('/', [MatchController::class, 'store'])->name('matches.store');
+
+    Route::get('/my-matches/{match?}', [MyMatchesController::class, 'index'])->name('my-matches.index');
+
 });
 
 require __DIR__.'/auth.php';

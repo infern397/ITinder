@@ -14,6 +14,11 @@ class User extends Authenticatable
 
     protected $with = ['skills', 'seekingSkills'];
 
+    protected $attributes = [
+        'bio' => '',
+        'experience' => ''
+    ];
+
     /**
      * The attributes that are mass assignable.
      *

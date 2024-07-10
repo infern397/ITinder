@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType } from "vue";
+import {computed, PropType} from "vue";
 
 const props = defineProps({
     title: String,
@@ -13,6 +13,10 @@ const emit = defineEmits(['toggleExpandBlock']);
 const toggleBlock = () => {
     emit('toggleExpandBlock', props.block);
 };
+
+const reduction = function(content: string): string {
+    return content.substring(0, 100) + (content.length > 100 ? '...' : '');
+};
 </script>
 
 <template>
@@ -22,7 +26,7 @@ const toggleBlock = () => {
         :class="{ 'expanded': expandedBlock === block, 'hidden': expandedBlock && expandedBlock !== block }"
     >
         <p class="text-gray-600 font-medium">{{ title }}:</p>
-        <p v-text="expandedBlock === block ? content : content.substring(0, 100) + (content.length > 100 ? '...' : '')"></p>
+        <p v-text="expandedBlock === block ? content : reduction(content)"></p>
     </div>
 </template>
 

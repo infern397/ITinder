@@ -6,7 +6,15 @@ import Deck from "@/Components/ITinder/Cards/Deck.vue";
 import { UserInterface } from "@/types/UserInterface";
 
 const props = defineProps({
-    users: Array as PropType<UserInterface[]>,
+    users: {
+        type: Array as PropType<UserInterface[]>,
+        required: true
+    },
+    newUsers: {
+        type: Array as PropType<UserInterface[]>,
+        required: false,
+        default: () => []
+    }
 });
 
 const windowHeight = ref(window.innerHeight);
@@ -25,7 +33,8 @@ const computedHeight = computed(() => windowHeight.value - 65);
 
     <AuthenticatedLayout>
         <div class="flex justify-center items-center relative overflow-hidden py-10 md:py-20" :style="`height: ${computedHeight}px`">
-            <Deck :users="props.users"/>
+            {{ newUsers }}
+            <Deck :users="props.users" :new-users="props.newUsers"/>
         </div>
     </AuthenticatedLayout>
 </template>

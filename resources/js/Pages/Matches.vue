@@ -32,7 +32,7 @@ const selectedMatch = ref(props.selectedMatch);
                         <span class="flex-1 p-2 whitespace-nowrap">Rejected</span>
                     </a>
                 </div>
-                <div class="sm:grid grid-cols-12 gap-3">
+                <div v-if="matches.length > 0" class="sm:grid grid-cols-12 gap-3">
                     <div class="bg-white col-span-4 lg:col-span-3
                      dark:bg-gray-800 shadow sm:rounded-lg">
                         <Sidebar class="transition-transform -translate-x-full sm:translate-x-0"
@@ -42,6 +42,9 @@ const selectedMatch = ref(props.selectedMatch);
                     <div class="bg-white col-span-8 lg:col-span-9 dark:bg-gray-800 shadow rounded-lg">
                         <Match :match="selectedMatch" />
                     </div>
+                </div>
+                <div v-else>
+                    <p class="text-center text-gray-500 dark:text-gray-400">No matches found</p>
                 </div>
             </div>
         </div>

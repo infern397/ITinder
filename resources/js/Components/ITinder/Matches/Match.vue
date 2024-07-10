@@ -7,7 +7,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="flex flex-col p-3 text-gray-900 dark:text-gray-100 space-y-4">
+    <div v-if="match" class="flex flex-col p-3 text-gray-900 dark:text-gray-100 space-y-4">
         <div class="flex items-center space-x-4">
             <img :src="match.user.profile_picture" alt="Profile Picture" class="w-20 h-20 rounded object-cover">
             <div>

@@ -78,9 +78,22 @@ class User extends Authenticatable
         return $this->hasMany(Message::class, 'receiver_id');
     }
 
+    public function acceptedUserMatches()
+    {
+        return $this->userMatches()->wherePivot('status', 'accepted');
+    }
+
+    public function acceptedMatchedUsers()
+    {
+        return $this->matchedUsers()->wherePivot('status', 'accepted');
+
+    }
+
     public function userMatches()
     {
-        return $this->hasMany(UserMatch::class);
+        return $this->belongsToMany(User::class, 'user_matches', 'matched_user_id', 'user_id')
+            ->withPivot('status')
+            ->withTimestamps();
     }
 
     public function matchedUsers()

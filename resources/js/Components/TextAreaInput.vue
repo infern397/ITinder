@@ -11,9 +11,10 @@ onMounted(() => {
     }
 });
 
-const props = defineProps<{
-    placeholder?: string;
-}>();
+const props = withDefaults(defineProps(), {
+    placeholder: String,
+    rows: () => 3
+});
 
 const autoExpand = () => {
     nextTick(() => {
@@ -32,7 +33,7 @@ defineExpose({focus: () => input.value?.focus()});
     <textarea
         class="w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500
         dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-        rows="3"
+        :rows="props.rows ? props.rows : 3"
         :placeholder="props.placeholder || 'Enter some text...'"
         ref="input"
         v-model="model"

@@ -35,6 +35,9 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('my-matches.index', { status: 'pending' })" :active="route().current('my-matches.index')">
                                     Matches
                                 </NavLink>
+                                <NavLink :href="route('chat.index')" :active="route().current('chat.index')">
+                                    Chat
+                                </NavLink>
                             </div>
                         </div>
 

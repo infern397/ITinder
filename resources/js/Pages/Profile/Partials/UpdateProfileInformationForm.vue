@@ -28,7 +28,7 @@ const seekingSkills = ref(user.seeking_skills ?? []);
 const form = useForm({
     name: user.name,
     email: user.email,
-    profile_picture: user.profile_picture as string | undefined,
+    profile_picture: user.profile_picture as string | File,
     bio: user.bio ?? '',
     location: user.location ?? '',
     experience: user.experience ?? '',
@@ -37,12 +37,15 @@ const form = useForm({
     seeking_skills: seekingSkills.value.map((skill: SkillInterface ) => skill.id),
 });
 
-const uploadImage = (event) => {
-    const file = event.target.files[0];
-    if (file) {
+const uploadImage = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    if (target && target.files && target.files.length > 0) {
+        const file = target.files[0];
         const reader = new FileReader();
-        reader.onload = (e) => {
-            previewUrl.value = e.target.result;
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+            if (e.target && typeof e.target.result === 'string') {
+                previewUrl.value = e.target.result;
+            }
         };
         reader.readAsDataURL(file);
         form.profile_picture = file;
@@ -50,9 +53,9 @@ const uploadImage = (event) => {
 };
 
 const submitForm = () => {
-    if (originalProfilePicture.value === form.profile_picture) {
-        delete form.profile_picture;
-    }
+    // if (originalProfilePicture.value === form.profile_picture) {
+    //     delete form.profile_picture;
+    // }
     form.skills = userSkills.value.map(skill => skill.id);
     form.seeking_skills = seekingSkills.value.map((skill: SkillInterface ) => skill.id);
     form.post(route('profile.update'), {

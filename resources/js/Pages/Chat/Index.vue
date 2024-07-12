@@ -2,11 +2,17 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 import {Link, usePage} from "@inertiajs/vue3";
-import { ref } from "vue";
-import {computed, onMounted} from "vue/dist/vue";
+import {PropType, ref} from "vue";
+import {UserInterface} from "@/types/UserInterface";
 
-const { props } = usePage();
-const users = ref(props.users);
+
+const { users } = defineProps({
+    users: {
+        type: Array as PropType<UserInterface[]>,
+        required: true
+    }
+
+});
 
 </script>
 

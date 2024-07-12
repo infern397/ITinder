@@ -15,7 +15,7 @@ export interface UserInterface {
     github_link: string;
     linkedin_link: string;
     skills: SkillInterface[];
-    seekingSkills: SkillInterface[];
+    seeking_skills: SkillInterface[];
 }
 
 export interface MatchInterface {

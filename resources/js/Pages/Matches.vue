@@ -1,15 +1,27 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { usePage } from "@inertiajs/vue3";
-import { ref } from "vue";
+import {PropType, ref} from "vue";
 import Sidebar from "@/Components/ITinder/Matches/Sidebar.vue";
 import Match from "@/Components/ITinder/Matches/Match.vue";
 import { Link } from '@inertiajs/vue3';
+import {MatchInterface} from "@/types/UserInterface";
 
-const { props } = usePage();
-const matches = ref(props.matches);
-const selectedMatch = ref(props.selectedMatch);
-const currentStatus = ref(props.currentStatus);
+const { matches, selectedMatch, currentStatus } = defineProps({
+    matches: {
+        type: Array as PropType<MatchInterface[]>,
+        required: true
+    },
+    selectedMatch: {
+        type: [Object, null] as PropType<MatchInterface | null>,
+        required: true
+    },
+    currentStatus: {
+        type: String as PropType<string>,
+        required: true
+    }
+});
+
 
 const statuses = [
     { label: 'New', value: 'pending' },
@@ -36,7 +48,7 @@ const statuses = [
                     <div class="mb-3 sm:mb-0 bg-white col-span-4 lg:col-span-3 dark:bg-gray-800 shadow sm:rounded-lg">
                         <Sidebar :matches="matches" :current-match="selectedMatch" />
                     </div>
-                    <div class="bg-white col-span-8 lg:col-span-9 dark:bg-gray-800 shadow rounded-lg">
+                    <div v-if="selectedMatch" class="bg-white col-span-8 lg:col-span-9 dark:bg-gray-800 shadow rounded-lg">
                         <Match :match="selectedMatch" />
                     </div>
                 </div>

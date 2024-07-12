@@ -1,21 +1,33 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
-import { computed, nextTick, onMounted, ref } from "vue";
+import {computed, nextTick, onMounted, PropType, ref} from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextAreaInput from "@/Components/TextAreaInput.vue";
+import {MessageInterface} from "@/types/MessageInterface";
+import {UserInterface} from "@/types/UserInterface";
 
-const { props } = usePage();
-const messages = ref(props.messages);
-const user = ref(props.user);
-const receiver = ref(props.receiver);
+const { messages, user, receiver } = defineProps({
+    messages: {
+        type: Array as PropType<MessageInterface[]>,
+        required: true
+    },
+    user: {
+        type: Object as PropType<UserInterface>,
+        required: true
+    },
+    receiver: {
+        type: Object as PropType<UserInterface>,
+        required: true
+    }
+});
 
 const message = ref<string>('');
 
 const form = useForm({
     content: message.value,
-    sender_id: user.value.id,
-    receiver_id: receiver.value.id,
+    sender_id: user.id,
+    receiver_id: receiver.id,
 });
 
 const sendMessage = () => {
@@ -57,9 +69,7 @@ onMounted(() => {
     window.addEventListener('resize', () => {
         windowHeight.value = window.innerHeight;
     });
-    console.log(`chat.${receiver.value.id}.${user.value.id}`)
-    window.Echo.channel(`chat.${receiver.value.id}.${user.value.id}`)
-
+    window.Echo.channel(`chat.${receiver.id}.${user.id}`)
         .listen('MessageSent', (data) => {
             console.log(data.message)
             messages.value.push(data.message);

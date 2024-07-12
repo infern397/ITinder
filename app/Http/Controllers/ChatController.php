@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageRead;
 use App\Events\MessageSent;
 use App\Events\PrivateMessageSent;
 use App\Http\Requests\StoreMessageRequest;
@@ -38,19 +39,34 @@ class ChatController extends Controller
             })
             ->get();
 
+        $messages->map(function ($message) use ($request) {
+            if ($message->receiver_id === $request->user()->id && $message->read_at === null) {
+                $message->update(['read_at' => now()]);
+                broadcast(new MessageRead($message))->toOthers();
+            }
+        });
+
         return Inertia::render('Chat/Chat', ['messages' => $messages, 'user' => $request->user(), 'receiver' => $user]);
     }
 
-    public function storeMessage(Request $request, $receiverId)
+    public function storeMessage(StoreMessageRequest $request, $receiverId)
     {
-        $message = Message::create([
-            'sender_id' => $request->user()->id,
-            'receiver_id' => $receiverId,
-            'content' => $request->input('content'),
-        ]);
-
+        $data = $request->validated();
+        $message = Message::create($data);
 
         broadcast(new MessageSent($message))->toOthers();
+
+        return response()->json($message);
+    }
+
+
+    public function markAsRead(Request $request, $messageId)
+    {
+        $message = Message::findOrFail($messageId);
+        $message->read_at = now();
+        $message->save();
+
+        broadcast(new MessageRead($message))->toOthers();
 
         return Redirect::back();
     }

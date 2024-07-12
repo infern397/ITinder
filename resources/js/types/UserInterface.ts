@@ -7,6 +7,7 @@ export interface UserInterface {
     id: number;
     name: string;
     email: string;
+    email_verified_at: string;
     profile_picture: string;
     bio: string;
     location: string;

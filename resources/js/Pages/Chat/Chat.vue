@@ -1,28 +1,24 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-
-import {Link, useForm, usePage} from "@inertiajs/vue3";
-import {computed, nextTick, onMounted, ref} from "vue";
+import { Link, useForm, usePage } from "@inertiajs/vue3";
+import { computed, nextTick, onMounted, ref } from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import ChatInput from "@/Components/ITinder/Chat/ChatInput.vue";
 import TextAreaInput from "@/Components/TextAreaInput.vue";
 
-const {props} = usePage();
+const { props } = usePage();
 const messages = ref(props.messages);
 const user = ref(props.user);
 const receiver = ref(props.receiver);
 
 const message = ref<string>('');
 
-
 const form = useForm({
     content: message.value,
     sender_id: user.value.id,
     receiver_id: receiver.value.id,
-})
+});
 
 const sendMessage = () => {
-    console.log(message)
     if (message.value.trim() === '') {
         return;
     }
@@ -41,6 +37,12 @@ const sendMessage = () => {
             });
 
             message.value = '';
+
+            nextTick(() => {
+                if (messageContainer.value) {
+                    messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
+                }
+            });
         }
     });
 };
@@ -55,6 +57,18 @@ onMounted(() => {
     window.addEventListener('resize', () => {
         windowHeight.value = window.innerHeight;
     });
+    console.log(`chat.${receiver.value.id}.${user.value.id}`)
+    window.Echo.channel(`chat.${receiver.value.id}.${user.value.id}`)
+
+        .listen('MessageSent', (data) => {
+            console.log(data.message)
+            messages.value.push(data.message);
+            nextTick(() => {
+                if (messageContainer.value) {
+                    messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
+                }
+            });
+        });
 
     nextTick(() => {
         if (messageContainer.value) {
@@ -88,12 +102,12 @@ onMounted(() => {
                             </div>
                         </div>
                     </div>
-                        <div
-                            class="gap-2 bottom-0 left-0 right-0 p-3 bg-white dark:bg-gray-800 border-t-2 border-t-gray-600 flex">
-                            <TextAreaInput class="max-h-[100px]" v-model="message" placeholder="Enter your message..."
-                                           :rows="1"/>
-                            <PrimaryButton class="h-fit mt-auto" @click="sendMessage">Send</PrimaryButton>
-                        </div>
+                    <div
+                        class="gap-2 bottom-0 left-0 right-0 p-3 bg-white dark:bg-gray-800 border-t-2 border-t-gray-600 flex">
+                        <TextAreaInput class="max-h-[100px]" v-model="message" placeholder="Enter your message..."
+                                       :rows="1"/>
+                        <PrimaryButton class="h-fit mt-auto" @click="sendMessage">Send</PrimaryButton>
+                    </div>
                 </div>
             </div>
         </div>
@@ -101,5 +115,4 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
 </style>

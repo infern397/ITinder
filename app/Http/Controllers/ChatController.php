@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
+use App\Events\PrivateMessageSent;
 use App\Http\Requests\StoreMessageRequest;
 use App\Models\Message;
 use App\Models\User;
 use App\Models\UserMatch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class ChatController extends Controller
@@ -39,14 +41,17 @@ class ChatController extends Controller
         return Inertia::render('Chat/Chat', ['messages' => $messages, 'user' => $request->user(), 'receiver' => $user]);
     }
 
-    public function storeMessage(StoreMessageRequest $request, User $user)
+    public function storeMessage(Request $request, $receiverId)
     {
-        $data = $request->validated();
+        $message = Message::create([
+            'sender_id' => $request->user()->id,
+            'receiver_id' => $receiverId,
+            'content' => $request->input('content'),
+        ]);
 
-        $message = Message::create($data);
 
-//        broadcast(new MessageSent($message));
+        broadcast(new MessageSent($message))->toOthers();
 
-        return redirect()->back();
+        return Redirect::back();
     }
 }

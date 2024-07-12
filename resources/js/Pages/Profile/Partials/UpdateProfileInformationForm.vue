@@ -8,6 +8,7 @@ import {ArrowUpTrayIcon} from '@heroicons/vue/24/solid'
 import {ref} from "vue";
 import TextAreaInput from "@/Components/TextAreaInput.vue";
 import SkillManager from "@/Components/ITinder/Skills/SkillManager.vue";
+import {SkillInterface, UserInterface} from "@/types/UserInterface";
 
 defineProps<{
     mustVerifyEmail?: Boolean;
@@ -16,7 +17,7 @@ defineProps<{
     availableSeekingSkills: Array<{ id: number, name: string }>;
 }>();
 
-const user = usePage().props.auth.user;
+const user: UserInterface = usePage().props.auth.user;
 
 const originalProfilePicture = ref(user.profile_picture);
 
@@ -27,13 +28,13 @@ const seekingSkills = ref(user.seeking_skills ?? []);
 const form = useForm({
     name: user.name,
     email: user.email,
-    profile_picture: user.profile_picture,
+    profile_picture: user.profile_picture as string | undefined,
     bio: user.bio ?? '',
     location: user.location ?? '',
     experience: user.experience ?? '',
     github_link: user.github_link ?? '',
     skills: userSkills.value.map(skill => skill.id),
-    seeking_skills: seekingSkills.value.map(skill => skill.id),
+    seeking_skills: seekingSkills.value.map((skill: SkillInterface ) => skill.id),
 });
 
 const uploadImage = (event) => {
@@ -53,7 +54,7 @@ const submitForm = () => {
         delete form.profile_picture;
     }
     form.skills = userSkills.value.map(skill => skill.id);
-    form.seeking_skills = seekingSkills.value.map(skill => skill.id);
+    form.seeking_skills = seekingSkills.value.map((skill: SkillInterface ) => skill.id);
     form.post(route('profile.update'), {
         errorBag: 'updateProfileInformation',
         preserveScroll: true,

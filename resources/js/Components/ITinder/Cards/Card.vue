@@ -7,7 +7,10 @@ import UserProfile from "@/Components/ITinder/Cards/UserProfile.vue";
 import CardDetails from "@/Components/ITinder/Cards/CardDetails.vue";
 
 const props = defineProps({
-    card: Object as PropType<CardInterface & { user: UserInterface }>,
+    card: {
+        type: Object as PropType<CardInterface & { user: UserInterface }>,
+        default: () => ({ x: 0, swipeDirection: '', user: {} })
+    },
     index: Number,
     cards: Array as PropType<CardInterface[]>
 });

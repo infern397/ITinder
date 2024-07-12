@@ -10,6 +10,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class MessageSent implements ShouldBroadcast
 {
@@ -17,26 +18,18 @@ class MessageSent implements ShouldBroadcast
 
     public $message;
 
-    /**
-     * Create a new event instance.
-     */
     public function __construct(Message $message)
     {
         $this->message = $message;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return Channel
-     */
     public function broadcastOn()
     {
-        return new PrivateChannel('chat.' . $this->message->receiver_id);
+        return new Channel('chat.' . $this->message->sender_id . '.' . $this->message->receiver_id);
     }
 
     public function broadcastWith()
     {
-        return ['message' => $this->message->load('sender')];
+        return ['message' => $this->message];
     }
 }

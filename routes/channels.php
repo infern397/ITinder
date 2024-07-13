@@ -10,3 +10,7 @@ Broadcast::channel('chat.{senderId}.{receiverId}', function ($user, $senderId, $
     return $user->id == $senderId || $user->id == $receiverId;
 });
 
+Broadcast::channel('messages.{userId}', function ($user, $userId) {
+    return $user->id == $userId;
+});
+

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\MessageRead;
 use App\Events\MessageSent;
-use App\Events\PrivateMessageSent;
+use App\Events\NewMessage;
 use App\Http\Requests\StoreMessageRequest;
 use App\Models\Message;
 use App\Models\User;
@@ -39,12 +39,15 @@ class ChatController extends Controller
             })
             ->get();
 
+        broadcast(new NewMessage($user));
+
         $messages->map(function ($message) use ($request) {
             if ($message->receiver_id === $request->user()->id && $message->read_at === null) {
                 $message->update(['read_at' => now()]);
                 broadcast(new MessageRead($message))->toOthers();
             }
         });
+
 
         return Inertia::render('Chat/Chat', ['messages' => $messages, 'user' => $request->user(), 'receiver' => $user]);
     }
@@ -53,8 +56,10 @@ class ChatController extends Controller
     {
         $data = $request->validated();
         $message = Message::create($data);
+        $receiverUser = User::findOrFail($receiverId);
 
-        broadcast(new MessageSent($message))->toOthers();
+        broadcast(new NewMessage($receiverUser))->toOthers();
+//        broadcast(new MessageSent($message))->toOthers();
 
         return response()->json($message);
     }

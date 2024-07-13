@@ -31,8 +31,12 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $user = $request->user();
+        $newMessagesAmount = 0;
+        $newMatchesAmount = 0;
+
         if ($user) {
-            $user->load('seekingSkills');
+            $newMessagesAmount = $user->unreadMessagesCountGropedByUsers();
+            $newMatchesAmount = $user->newMatchesReceivedCount();
         }
         return [
             ...parent::share($request),
@@ -43,6 +47,8 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
+            'newMessagesAmount' => $newMessagesAmount,
+            'newMatchesAmount' => $newMatchesAmount,
         ];
     }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Link, useForm} from "@inertiajs/vue3";
-import {computed, nextTick, onMounted, ref, watch} from "vue";
+import {computed, nextTick, onMounted, onUnmounted, ref, watch} from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextAreaInput from "@/Components/TextAreaInput.vue";
 import {MessageInterface} from "@/types/MessageInterface";
@@ -98,6 +98,12 @@ onMounted(() => {
         }
     });
 });
+
+onUnmounted(() => {
+    console.log(123)
+    window.Echo.channel(`chat.${receiver.id}.${user.id}`).stopListening('MessageSent');
+});
+
 
 watch(messages, (newMessages) => {
     newMessages.forEach((message) => {

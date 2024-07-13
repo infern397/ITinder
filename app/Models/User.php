@@ -68,6 +68,16 @@ class User extends Authenticatable
         return $this->belongsToMany(Skill::class, 'user_seeking_skills');
     }
 
+    public function unreadMessagesCountGropedByUsers()
+    {
+        return $this->unreadMessages()->distinct('sender_id')->count();
+    }
+
+    public function unreadMessages()
+    {
+        return $this->messagesReceived()->where('read_at', null);
+    }
+
     public function messagesSent()
     {
         return $this->hasMany(Message::class, 'sender_id');
@@ -87,6 +97,11 @@ class User extends Authenticatable
     {
         return $this->matchedUsers()->wherePivot('status', 'accepted');
 
+    }
+
+    public function newMatchesReceivedCount()
+    {
+        return $this->userMatches()->wherePivot('status', 'pending')->count();
     }
 
     public function userMatches()

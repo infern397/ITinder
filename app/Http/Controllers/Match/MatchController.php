@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Match;
 
+use App\Events\NewMatch;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -31,6 +32,9 @@ class MatchController extends Controller
             'user_id' => $request->user()->id,
             'matched_user_id' => $request->matched_user_id,
         ]);
+
+        $receiver = User::findOrFail($request->matched_user_id);
+        broadcast(new NewMatch($receiver));
 
         return Redirect::back()->with('message', 'Match successfully created');
     }

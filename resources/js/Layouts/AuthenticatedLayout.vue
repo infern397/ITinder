@@ -1,13 +1,39 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import {Link, usePage} from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+
+const newMessagesAmount = ref(usePage().props.newMessagesAmount);
+const newMatchesAmount = ref(usePage().props.newMatchesAmount);
+
+const clippedNewMessagesAmount = computed(() => {
+    const amount = newMessagesAmount;
+    return amount > 99 ? '99+' : amount;
+});
+
+const clippedNewMatchesAmount = computed(() => {
+    const amount = newMatchesAmount;
+    return amount > 99 ? '99+' : amount;
+});
+
+onMounted(() => {
+    window.Echo.channel(`messages.${usePage().props.auth.user.id}`)
+        .listen('NewMessage', (e) => {
+            newMessagesAmount.value = e.messageCount;
+        });
+
+    window.Echo.channel(`matches.${usePage().props.auth.user.id}`)
+        .listen('NewMatch', (e) => {
+            newMatchesAmount.value = e.matchesCount;
+        });
+});
+
 </script>
 
 <template>
@@ -32,11 +58,21 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('matches.index')" :active="route().current('matches.index')">
                                     Home
                                 </NavLink>
-                                <NavLink :href="route('my-matches.index', { status: 'pending' })" :active="route().current('my-matches.index')">
+                                <NavLink class="relative" :href="route('my-matches.index', { status: 'pending' })"
+                                         :active="route().current('my-matches.index')">
                                     Matches
+                                    <div v-if="newMatchesAmount > 0"
+                                         class="absolute flex justify-center items-center top-[10%] right-[-10px] p-2 h-5 rounded-full bg-indigo-500">
+                                        <div class="text-center text-sm" >{{ clippedNewMatchesAmount }}</div>
+                                    </div>
                                 </NavLink>
-                                <NavLink :href="route('chat.index')" :active="route().current('chat.index')">
+                                <NavLink class="relative" :href="route('chat.index')"
+                                         :active="route().current('chat.index')">
                                     Chat
+                                    <div v-if="newMessagesAmount > 0"
+                                        class="absolute flex justify-center items-center top-[10%] right-[-10px] p-2 h-5 rounded-full bg-indigo-500">
+                                        <div class="text-center text-sm" >{{ clippedNewMessagesAmount }}</div>
+                                    </div>
                                 </NavLink>
                             </div>
                         </div>
@@ -70,7 +106,7 @@ const showingNavigationDropdown = ref(false);
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
+                                        <DropdownLink :href="route('profile.edit')"> Profile</DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
                                             Log Out
                                         </DropdownLink>
@@ -133,7 +169,7 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('profile.edit')"> Profile</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                                 Log Out
                             </ResponsiveNavLink>
@@ -145,13 +181,13 @@ const showingNavigationDropdown = ref(false);
             <!-- Page Heading -->
             <header class="bg-white dark:bg-gray-800 shadow" v-if="$slots.header">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <slot name="header" />
+                    <slot name="header"/>
                 </div>
             </header>
 
             <!-- Page Content -->
             <main>
-                <slot />
+                <slot/>
             </main>
         </div>
     </div>

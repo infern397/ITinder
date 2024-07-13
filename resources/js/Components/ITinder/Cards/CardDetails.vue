@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { PropType } from "vue";
+import {PropType, ref} from "vue";
 import { UserInterface } from "@/types/UserInterface";
 import ExpandableBlock from "@/Components/ITinder/Cards/ExpandableBlock.vue";
 import SkillList from "@/Components/ITinder/Cards/SkillList.vue";
+import {usePage} from "@inertiajs/vue3";
+
+const strings = ref(usePage().props.strings);
 
 const props = defineProps({
     user: Object as PropType<UserInterface>,
@@ -19,14 +22,14 @@ const toggleBlock = (block: string) => {
 <template>
     <div class="relative flex-grow gap-2 flex flex-col h-[100px]">
         <ExpandableBlock
-            title="About"
+            :title="strings['matches']['about']"
             :content="user.bio"
             :block="'about'"
             :expandedBlock="expandedBlock"
             @toggleExpandBlock="toggleBlock"
         />
         <ExpandableBlock
-            title="Experience"
+            :title="strings['matches']['experience']"
             :content="user.experience"
             :block="'experience'"
             :expandedBlock="expandedBlock"
@@ -34,13 +37,13 @@ const toggleBlock = (block: string) => {
         />
         <div class="w-full overflow-y-auto border border-gray-300 rounded flex-grow">
             <SkillList
-                title="Skills"
+                :title="strings['matches']['skills']"
                 :skills="user.skills"
                 :block="'skills'"
                 :expandedBlock="expandedBlock"
             />
             <SkillList
-                title="Seeking Skills"
+                :title="strings['matches']['seeking-skills']"
                 :skills="user.seeking_skills"
                 :block="'seeking-skills'"
                 :expandedBlock="expandedBlock"

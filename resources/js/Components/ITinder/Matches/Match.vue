@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import {router} from '@inertiajs/vue3';
+import {router, usePage} from '@inertiajs/vue3';
 import {MatchInterface} from "@/types/UserInterface";
-import {PropType} from "vue";
+import {PropType, ref} from "vue";
+
+const strings = ref(usePage().props.strings);
 
 const props = defineProps({
     match: Object as PropType<MatchInterface>,
@@ -44,17 +46,17 @@ const cancelMatch = function () {
             </div>
         </div>
         <div>
-            <h3 class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1">About</h3>
+            <h3 class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1">{{ strings['matches']['about'] }}</h3>
             <p class="p-3 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm">
                 {{ match.user.bio }}</p>
         </div>
         <div>
-            <h3 class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1">Experience</h3>
+            <h3 class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1">{{ strings['matches']['experience'] }}</h3>
             <p class="p-3 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm">
                 {{ match.user.experience }}</p>
         </div>
         <div>
-            <h3 class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1">Skills</h3>
+            <h3 class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1">{{ strings['matches']['skills'] }}</h3>
             <ul class="flex flex-wrap gap-2 p-2 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm">
                 <li class="px-2 py-1 text-sm rounded border border-gray-300" v-for="skill in match.user.skills"
                     :key="skill.id">{{ skill.name }}
@@ -62,7 +64,7 @@ const cancelMatch = function () {
             </ul>
         </div>
         <div>
-            <h3 class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1">Seeking Skills</h3>
+            <h3 class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-1">{{ strings['matches']['seeking-skills'] }}</h3>
             <ul class="flex flex-wrap gap-2 p-2 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-md shadow-sm">
                 <li class="px-2 py-1 text-sm rounded border border-gray-300" v-for="skill in match.user.seeking_skills"
                     :key="skill.id">{{ skill.name }}
@@ -70,9 +72,9 @@ const cancelMatch = function () {
             </ul>
         </div>
         <div class="flex gap-2">
-            <PrimaryButton v-if="match.status !== 'pending'" @click="cancelMatch">Cancel</PrimaryButton>
-            <PrimaryButton v-if="match.status !== 'accepted'" @click="acceptMatch">Accept</PrimaryButton>
-            <PrimaryButton v-if="match.status !== 'rejected'" @click="rejectMatch">Reject</PrimaryButton>
+            <PrimaryButton v-if="match.status !== 'pending'" @click="cancelMatch">{{ strings['my-matches']['cancel'] }}</PrimaryButton>
+            <PrimaryButton v-if="match.status !== 'accepted'" @click="acceptMatch">{{ strings['my-matches']['accept'] }}</PrimaryButton>
+            <PrimaryButton v-if="match.status !== 'rejected'" @click="rejectMatch">{{ strings['my-matches']['reject'] }}</PrimaryButton>
         </div>
     </div>
 </template>

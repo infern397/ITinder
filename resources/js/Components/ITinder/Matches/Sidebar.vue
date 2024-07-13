@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
-import { PropType } from "vue";
+import {Link, usePage} from '@inertiajs/vue3';
+import {PropType, ref} from "vue";
 
 const props = defineProps({
     matches: {

@@ -7,6 +7,8 @@ import Match from "@/Components/ITinder/Matches/Match.vue";
 import { Link } from '@inertiajs/vue3';
 import {MatchInterface} from "@/types/UserInterface";
 
+const strings = ref(usePage().props.strings);
+
 const { matches, selectedMatch, currentStatus } = defineProps({
     matches: {
         type: Array as PropType<MatchInterface[]>,
@@ -24,9 +26,9 @@ const { matches, selectedMatch, currentStatus } = defineProps({
 
 
 const statuses = [
-    { label: 'New', value: 'pending' },
-    { label: 'Accepted', value: 'accepted' },
-    { label: 'Rejected', value: 'rejected' },
+    { label: strings.value['my-matches']['new'], value: 'pending' },
+    { label: strings.value['my-matches']['accepted'], value: 'accepted' },
+    { label: strings.value['my-matches']['rejected'], value: 'rejected' },
 ];
 
 </script>
@@ -34,7 +36,7 @@ const statuses = [
 <template>
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">My Matches</h2>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">{{ strings['my-matches']['my-matches'] }}</h2>
         </template>
 
         <div class="py-12">
@@ -46,14 +48,14 @@ const statuses = [
                 </div>
                 <div v-if="matches.length > 0" class="sm:grid grid-cols-12 gap-3">
                     <div class="mb-3 sm:mb-0 bg-white col-span-4 lg:col-span-3 dark:bg-gray-800 shadow sm:rounded-lg">
-                        <Sidebar :matches="matches" :current-match="selectedMatch" />
+                        <Sidebar v-if="selectedMatch"  :matches="matches" :current-match="selectedMatch" />
                     </div>
                     <div v-if="selectedMatch" class="bg-white col-span-8 lg:col-span-9 dark:bg-gray-800 shadow rounded-lg">
                         <Match :match="selectedMatch" />
                     </div>
                 </div>
                 <div v-else>
-                    <p class="text-center text-gray-500 dark:text-gray-400">No matches found</p>
+                    <p class="text-center text-gray-500 dark:text-gray-400">{{ strings['my-matches']['no-matches'] }}</p>
                 </div>
             </div>
         </div>

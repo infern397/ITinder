@@ -9,6 +9,7 @@ interface Skill {
 
 const props = defineProps<{
     availableSkills: Skill[];
+    placeholder: String;
 }>();
 
 const emit = defineEmits<{
@@ -48,7 +49,7 @@ const onBlur = () => {
     <div class="mt-1">
         <TextInput
             class="block w-full"
-            placeholder="Search skills..."
+            :placeholder="placeholder"
             @focus="onFocus"
             @blur="onBlur"
             v-model="searchQuery"/>

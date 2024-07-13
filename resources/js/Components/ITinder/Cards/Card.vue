@@ -5,6 +5,7 @@ import { CardInterface } from "@/types/CardInterface";
 import { UserInterface } from "@/types/UserInterface";
 import UserProfile from "@/Components/ITinder/Cards/UserProfile.vue";
 import CardDetails from "@/Components/ITinder/Cards/CardDetails.vue";
+import {usePage} from "@inertiajs/vue3";
 
 const props = defineProps({
     card: {

@@ -14,6 +14,7 @@ const props = defineProps<{
     modelValue: Skill[];
     label: string;
     availableSkills: Skill[];
+    placeholder: String;
 }>();
 
 const availableSkillsCopy = ref([...props.availableSkills]);
@@ -43,7 +44,7 @@ const removeSkill = (skill: Skill) => {
 <template class="text-white">
     <InputLabel for="skills" :value="label"/>
     <SkillList class="" v-model=selectedSkills @skill-removed="removeSkill"/>
-    <SkillSelector :availableSkills="availableSkillsCopy" @skill-added="addSkill"/>
+    <SkillSelector :placeholder :availableSkills="availableSkillsCopy" @skill-added="addSkill"/>
 </template>
 
 <style scoped>

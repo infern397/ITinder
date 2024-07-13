@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {Link, useForm} from "@inertiajs/vue3";
+import {Link, useForm, usePage} from "@inertiajs/vue3";
 import {computed, nextTick, onMounted, onUnmounted, ref, watch} from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextAreaInput from "@/Components/TextAreaInput.vue";
@@ -8,6 +8,8 @@ import {MessageInterface} from "@/types/MessageInterface";
 import {UserInterface} from "@/types/UserInterface";
 import {CheckIcon} from '@heroicons/vue/16/solid';
 import axios from 'axios';
+
+const strings = ref(usePage().props.strings);
 
 const {messages: initialMessages, user, receiver} = defineProps({
     messages: {
@@ -119,7 +121,7 @@ watch(messages, (newMessages) => {
                 <div class="h-full flex flex-col w-full mb-3 sm:mb-0 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                     <div
                         class="flex items-center py-3 px-5 justify-between rounded-t top-0 left-0 right-0 dark:bg-gray-800 dark:text-gray-300 border-b-2 border-b-gray-600">
-                        <Link class="pl-3" :href="route('chat.index')">Back</Link>
+                        <Link class="pl-3" :href="route('chat.index')">{{strings['chat']['back']}}</Link>
                         <div class="font-bold">{{ receiver.name }}</div>
                         <img :src="receiver.profile_picture" alt="Profile Picture"
                              class="w-14 h-14 rounded object-cover">
@@ -148,9 +150,9 @@ watch(messages, (newMessages) => {
 
                     <div
                         class="gap-2 bottom-0 left-0 right-0 p-3 bg-white dark:bg-gray-800 border-t-2 border-t-gray-600 flex">
-                        <TextAreaInput class="max-h-[100px]" v-model="message" placeholder="Enter your message..."
+                        <TextAreaInput class="max-h-[100px]" v-model="message" :placeholder="strings['chat']['placeholder']"
                                        :rows="1"/>
-                        <PrimaryButton class="h-fit mt-auto" @click="sendMessage">Send</PrimaryButton>
+                        <PrimaryButton class="h-fit mt-auto" @click="sendMessage">{{ strings['chat']['send'] }}</PrimaryButton>
                     </div>
                 </div>
             </div>

@@ -37,7 +37,11 @@ class HandleInertiaRequests extends Middleware
         $newMatchesAmount = 0;
 
         $currentLocale = App::getLocale();
-        $header = Lang::get('header');
+        $headerStrings = Lang::get('header');
+        $matchesStrings = Lang::get('matches');
+        $myMatchesStrings = Lang::get('myMatches');
+        $myProfileStrings = Lang::get('profile');
+        $myChatStrings = Lang::get('chat');
 
         if ($user) {
             $newMessagesAmount = $user->unreadMessagesCountGropedByUsers();
@@ -53,7 +57,13 @@ class HandleInertiaRequests extends Middleware
                 'location' => $request->url(),
             ],
             'currentLocale' => $currentLocale,
-            'header' => $header,
+            'strings' => [
+                'header' => $headerStrings,
+                'matches' => $matchesStrings,
+                'my-matches' => $myMatchesStrings,
+                'profile' => $myProfileStrings,
+                'chat' => $myChatStrings,
+                ],
             'newMessagesAmount' => $newMessagesAmount,
             'newMatchesAmount' => $newMatchesAmount,
         ];

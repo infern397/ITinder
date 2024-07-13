@@ -3,8 +3,10 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { useForm } from '@inertiajs/vue3';
+import {useForm, usePage} from '@inertiajs/vue3';
 import { ref } from 'vue';
+
+const strings = ref(usePage().props.strings);
 
 const passwordInput = ref<HTMLInputElement | null>(null);
 const currentPasswordInput = ref<HTMLInputElement | null>(null);
@@ -38,16 +40,16 @@ const updatePassword = () => {
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Update Password</h2>
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ strings['profile']['update-password'] }}</h2>
 
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                Ensure your account is using a long, random password to stay secure.
+                {{ strings['profile']['password-info'] }}
             </p>
         </header>
 
         <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="current_password" value="Current Password" />
+                <InputLabel for="current_password" :value="strings['profile']['current-password']" />
 
                 <TextInput
                     id="current_password"
@@ -62,7 +64,7 @@ const updatePassword = () => {
             </div>
 
             <div>
-                <InputLabel for="password" value="New Password" />
+                <InputLabel for="password" :value="strings['profile']['new-password']" />
 
                 <TextInput
                     id="password"
@@ -77,7 +79,7 @@ const updatePassword = () => {
             </div>
 
             <div>
-                <InputLabel for="password_confirmation" value="Confirm Password" />
+                <InputLabel for="password_confirmation" :value="strings['profile']['confirm-password']" />
 
                 <TextInput
                     id="password_confirmation"
@@ -91,7 +93,7 @@ const updatePassword = () => {
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <PrimaryButton :disabled="form.processing">{{ strings['profile'].save }}</PrimaryButton>
 
                 <Transition
                     enter-active-class="transition ease-in-out"
@@ -99,7 +101,7 @@ const updatePassword = () => {
                     leave-active-class="transition ease-in-out"
                     leave-to-class="opacity-0"
                 >
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
+                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">{{ strings['profile'].save }}</p>
                 </Transition>
             </div>
         </form>

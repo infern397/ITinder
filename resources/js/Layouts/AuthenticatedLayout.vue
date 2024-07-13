@@ -18,7 +18,7 @@ const locales = ref({
 
 const newMessagesAmount = ref(usePage().props.newMessagesAmount);
 const newMatchesAmount = ref(usePage().props.newMatchesAmount);
-const header = ref(usePage().props.header);
+const strings = ref(usePage().props.strings);
 
 const clippedNewMessagesAmount = computed(() => {
     const amount = newMessagesAmount;
@@ -64,11 +64,11 @@ onMounted(() => {
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('matches.index')" :active="route().current('matches.index')">
-                                    {{ header.home }}
+                                    {{ strings['header']['home'] }}
                                 </NavLink>
                                 <NavLink class="relative" :href="route('my-matches.index', { status: 'pending' })"
                                          :active="route().current('my-matches.index')">
-                                    {{ header.matches }}
+                                    {{ strings['header']['matches'] }}
                                     <div v-if="newMatchesAmount > 0"
                                          class="absolute flex justify-center items-center top-[10%] right-[-10px] p-2 h-5 rounded-full bg-indigo-500">
                                         <div class="text-center text-sm">{{ clippedNewMatchesAmount }}</div>
@@ -76,7 +76,7 @@ onMounted(() => {
                                 </NavLink>
                                 <NavLink class="relative" :href="route('chat.index')"
                                          :active="route().current('chat.index')">
-                                    {{ header.chat }}
+                                    {{ strings['header']['chat'] }}
                                     <div v-if="newMessagesAmount > 0"
                                          class="absolute flex justify-center items-center top-[10%] right-[-10px] p-2 h-5 rounded-full bg-indigo-500">
                                         <div class="text-center text-sm">{{ clippedNewMessagesAmount }}</div>
@@ -114,9 +114,9 @@ onMounted(() => {
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink :href="route('profile.edit')">{{ header.profile }}</DropdownLink>
+                                        <DropdownLink :href="route('profile.edit')">{{ strings['header']['profile'] }}</DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
-                                            {{ header.logout }}
+                                            {{ strings['header']['logout'] }}
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>

@@ -6,11 +6,19 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import {Link, usePage} from '@inertiajs/vue3';
+import LocaleDropdown from "@/Components/ITinder/LocaleDropdown.vue";
 
 const showingNavigationDropdown = ref(false);
 
+const currentLocale = ref(usePage().props.currentLocale);
+const locales = ref({
+    en: 'English',
+    ru: 'Русский',
+});
+
 const newMessagesAmount = ref(usePage().props.newMessagesAmount);
 const newMatchesAmount = ref(usePage().props.newMatchesAmount);
+const header = ref(usePage().props.header);
 
 const clippedNewMessagesAmount = computed(() => {
     const amount = newMessagesAmount;
@@ -56,30 +64,30 @@ onMounted(() => {
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('matches.index')" :active="route().current('matches.index')">
-                                    Home
+                                    {{ header.home }}
                                 </NavLink>
                                 <NavLink class="relative" :href="route('my-matches.index', { status: 'pending' })"
                                          :active="route().current('my-matches.index')">
-                                    Matches
+                                    {{ header.matches }}
                                     <div v-if="newMatchesAmount > 0"
                                          class="absolute flex justify-center items-center top-[10%] right-[-10px] p-2 h-5 rounded-full bg-indigo-500">
-                                        <div class="text-center text-sm" >{{ clippedNewMatchesAmount }}</div>
+                                        <div class="text-center text-sm">{{ clippedNewMatchesAmount }}</div>
                                     </div>
                                 </NavLink>
                                 <NavLink class="relative" :href="route('chat.index')"
                                          :active="route().current('chat.index')">
-                                    Chat
+                                    {{ header.chat }}
                                     <div v-if="newMessagesAmount > 0"
-                                        class="absolute flex justify-center items-center top-[10%] right-[-10px] p-2 h-5 rounded-full bg-indigo-500">
-                                        <div class="text-center text-sm" >{{ clippedNewMessagesAmount }}</div>
+                                         class="absolute flex justify-center items-center top-[10%] right-[-10px] p-2 h-5 rounded-full bg-indigo-500">
+                                        <div class="text-center text-sm">{{ clippedNewMessagesAmount }}</div>
                                     </div>
                                 </NavLink>
                             </div>
                         </div>
-
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
                             <!-- Settings Dropdown -->
-                            <div class="ms-3 relative">
+                            <div class="ms-3 relative flex">
+                                <LocaleDropdown :currentLocale="currentLocale" :locales="locales"/>
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
@@ -106,9 +114,9 @@ onMounted(() => {
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink :href="route('profile.edit')"> Profile</DropdownLink>
+                                        <DropdownLink :href="route('profile.edit')">{{ header.profile }}</DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
-                                            Log Out
+                                            {{ header.logout }}
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>

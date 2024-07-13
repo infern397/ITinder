@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -34,6 +36,9 @@ class HandleInertiaRequests extends Middleware
         $newMessagesAmount = 0;
         $newMatchesAmount = 0;
 
+        $currentLocale = App::getLocale();
+        $header = Lang::get('header');
+
         if ($user) {
             $newMessagesAmount = $user->unreadMessagesCountGropedByUsers();
             $newMatchesAmount = $user->newMatchesReceivedCount();
@@ -47,6 +52,8 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
+            'currentLocale' => $currentLocale,
+            'header' => $header,
             'newMessagesAmount' => $newMessagesAmount,
             'newMatchesAmount' => $newMatchesAmount,
         ];

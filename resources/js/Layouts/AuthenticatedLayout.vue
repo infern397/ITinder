@@ -125,6 +125,8 @@ onMounted(() => {
 
                         <!-- Hamburger -->
                         <div class="-me-2 flex items-center sm:hidden">
+                            <LocaleDropdown :currentLocale="currentLocale" :locales="locales"/>
+
                             <button
                                 @click="showingNavigationDropdown = !showingNavigationDropdown"
                                 class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
@@ -163,7 +165,13 @@ onMounted(() => {
                 >
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('matches.index')" :active="route().current('matches.index')">
-                            Home
+                            {{ strings['header']['home'] }}
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('my-matches.index', { status: 'pending' })" :active="route().current('my-matches.index')">
+                            {{ strings['header']['matches'] }}
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('chat.index')" :active="route().current('chat.index')">
+                            {{ strings['header']['chat'] }}
                         </ResponsiveNavLink>
                     </div>
 
@@ -177,9 +185,9 @@ onMounted(() => {
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile</ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('profile.edit')">{{ strings['header']['profile'] }}</ResponsiveNavLink>
                             <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
+                                {{ strings['header']['logout'] }}
                             </ResponsiveNavLink>
                         </div>
                     </div>

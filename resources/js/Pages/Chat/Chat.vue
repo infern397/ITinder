@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {Link, useForm, usePage} from "@inertiajs/vue3";
+import {Head, Link, useForm, usePage} from "@inertiajs/vue3";
 import {computed, nextTick, onMounted, onUnmounted, ref, watch} from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextAreaInput from "@/Components/TextAreaInput.vue";
@@ -115,6 +115,8 @@ watch(messages, (newMessages) => {
 </script>
 
 <template>
+    <Head :title="receiver.name"/>
+
     <AuthenticatedLayout>
         <div class="py-12" :style="`height: ${computedHeight}px`">
             <div class="h-full max-w-5xl mx-auto sm:px-6 lg:px-8 space-y-6">

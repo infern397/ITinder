@@ -5,6 +5,8 @@ import {computed, onMounted, ref, reactive, PropType} from "vue";
 import Deck from "@/Components/ITinder/Cards/Deck.vue";
 import { UserInterface } from "@/types/UserInterface";
 
+const strings = ref(usePage().props.strings);
+
 const props = defineProps({
     users: {
         type: Array as PropType<UserInterface[]>,
@@ -29,7 +31,7 @@ const computedHeight = computed(() => windowHeight.value - 65);
 </script>
 
 <template class="overflow-hidden">
-    <Head title="Dashboard"/>
+    <Head :title="strings['title']['matches']"/>
 
     <AuthenticatedLayout>
         <div class="flex justify-center items-center relative overflow-hidden py-10 md:py-20" :style="`height: ${computedHeight}px`">

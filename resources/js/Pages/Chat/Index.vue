@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
-import {Link, usePage} from "@inertiajs/vue3";
+import {Head, Link, usePage} from "@inertiajs/vue3";
 import {PropType, ref} from "vue";
 import {UserInterface} from "@/types/UserInterface";
 
+const strings = ref(usePage().props.strings);
 
 const {users} = defineProps({
     users: {
@@ -17,6 +18,8 @@ const {users} = defineProps({
 </script>
 
 <template>
+    <Head :title="strings['title']['chat']"/>
+
     <AuthenticatedLayout>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">

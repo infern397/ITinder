@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { usePage } from "@inertiajs/vue3";
-import {PropType, ref} from "vue";
+import {Head, usePage} from "@inertiajs/vue3";
+import {computed, PropType, ref} from "vue";
 import Sidebar from "@/Components/ITinder/Matches/Sidebar.vue";
 import Match from "@/Components/ITinder/Matches/Match.vue";
 import { Link } from '@inertiajs/vue3';
 import {MatchInterface} from "@/types/UserInterface";
+import {match} from "@headlessui/vue/dist/utils/match";
 
 const strings = ref(usePage().props.strings);
 
@@ -24,16 +25,28 @@ const { matches, selectedMatch, currentStatus } = defineProps({
     }
 });
 
-
 const statuses = [
     { label: strings.value['my-matches']['new'], value: 'pending' },
     { label: strings.value['my-matches']['accepted'], value: 'accepted' },
     { label: strings.value['my-matches']['rejected'], value: 'rejected' },
 ];
 
+const headTitle = computed(() => {
+    switch(currentStatus) {
+        case 'pending':
+            return strings.value['title']['new-matches'];
+        case 'accepted':
+            return strings.value['title']['accepted-matches'];
+        case 'rejected':
+            return strings.value['title']['rejected-matches'];
+    }
+});
+
 </script>
 
 <template>
+    <Head :title="headTitle"/>
+
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">{{ strings['my-matches']['my-matches'] }}</h2>

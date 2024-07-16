@@ -17,7 +17,7 @@ defineProps<{
 </script>
 
 <template>
-    <Head title="Profile"
+    <Head :title="strings['title']['profile']"
 
     />
 

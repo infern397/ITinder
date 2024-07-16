@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
         $myMatchesStrings = Lang::get('myMatches');
         $myProfileStrings = Lang::get('profile');
         $myChatStrings = Lang::get('chat');
+        $myTitleStrings = Lang::get('title');
 
         if ($user) {
             $newMessagesAmount = $user->unreadMessagesCountGropedByUsers();
@@ -63,6 +64,7 @@ class HandleInertiaRequests extends Middleware
                 'my-matches' => $myMatchesStrings,
                 'profile' => $myProfileStrings,
                 'chat' => $myChatStrings,
+                'title' => $myTitleStrings,
                 ],
             'newMessagesAmount' => $newMessagesAmount,
             'newMatchesAmount' => $newMatchesAmount,

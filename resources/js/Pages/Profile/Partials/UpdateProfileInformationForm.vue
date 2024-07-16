@@ -55,9 +55,9 @@ const uploadImage = (event: Event) => {
 };
 
 const submitForm = () => {
-    // if (originalProfilePicture.value === form.profile_picture) {
-    //     delete form.profile_picture;
-    // }
+    if (originalProfilePicture.value === form.profile_picture) {
+        delete form.profile_picture;
+    }
     form.skills = userSkills.value.map(skill => skill.id);
     form.seeking_skills = seekingSkills.value.map((skill: SkillInterface ) => skill.id);
     form.post(route('profile.update'), {
@@ -65,7 +65,7 @@ const submitForm = () => {
         preserveScroll: true,
         onSuccess: () => {
             originalProfilePicture.value = user.profile_picture;
-            previewUrl.value = '';
+            // previewUrl.value = '';
         },
     });
 };
